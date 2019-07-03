@@ -1,2 +1,2 @@
 # nesterov
-A C++ based Submodular Optimization toolkit.
+A GPU accelerated Submodular Optimization toolkit.
