@@ -23,14 +23,14 @@ class FacilityLocationSelection(SubmodularSelection):
 		self.pairwise_func_name = pairwise_func
 		self.device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 		norm = lambda x: numpy.sqrt((x*x).sum(axis=1)).reshape(x.shape[0], 1)
-		norm2 = lambda x: (x*x).sum(axis=1).reshape(x.shape[0], 1)
+		norm2 = lambda x: torch.sum((x*x), dim=1).reshape(x.shape[0], 1)
 
 		if pairwise_func == 'corr':
 			self.pairwise_func = lambda X: numpy.corrcoef(X, rowvar=True) ** 2.
 		elif pairwise_func == 'cosine':
 			self.pairwise_func = lambda X: numpy.abs(numpy.dot(X, X.T) / (norm(X).dot(norm(X).T)))
 		elif pairwise_func == 'euclidean':
-			self.pairwise_func = lambda X: -((-2 * numpy.dot(X, X.T) + norm2(X)).T + norm2(X))
+			self.pairwise_func = lambda X: -(torch.transpose(-2 * torch.mm(X, torch.transpose(X, 0, 1)) + norm2(X), 0, 1) + norm2(X))
 		elif pairwise_func == 'precomputed':
 			self.pairwise_func = pairwise_func
 		elif callable(pairwise_func):
@@ -52,13 +52,12 @@ class FacilityLocationSelection(SubmodularSelection):
 		if self.pairwise_func == 'precomputed':
 			X_pairwise = X
 		else:
-			X = numpy.array(X, dtype='float64')
+			X = torch.from_numpy(X).to(self.device)
 			X_pairwise = self.pairwise_func(X)
 
 			if self.pairwise_func_name == 'euclidean':
-				eps = numpy.max(numpy.diag(X_pairwise))
-				X_pairwise -= numpy.eye(X.shape[0]) * eps
-		X_pairwise = torch.from_numpy(X_pairwise).to(self.device)
+				eps = torch.max(torch.diag(X_pairwise).to(self.device)).to(self.device)
+				X_pairwise = torch.sub(X_pairwise, torch.eye(X.shape[0]).double() * eps.double()).to(self.device)
 		return super(FacilityLocationSelection, self).fit(X_pairwise, y)
 
 	def _greedy_select(self, X_pairwise):
