@@ -9,12 +9,17 @@ import numpy
 from .base import SubmodularSelection
 
 def select_next(X, gains, current_values, mask):
+	# for idx in range(X.shape[0]):
+	# 	if mask[idx].item() == 1:
+	# 		continue
+	#
+	# 	a = torch.max(X[idx], current_values)
+	# 	gains[idx] = torch.sum(torch.sub(a, current_values))
+	a = torch.max(X, current_values)
+	temp = torch.sum(torch.sub(a, current_values), dim=1)
 	for idx in range(X.shape[0]):
-		if mask[idx].item() == 1:
-			continue
-
-		a = torch.max(X[idx], current_values)
-		gains[idx] = torch.sum(torch.sub(a, current_values))
+		if mask[idx].item() != 1:
+			gains[idx] = temp[idx]
 	return torch.argmax(gains)
 
 
@@ -68,6 +73,7 @@ class FacilityLocationSelection(SubmodularSelection):
 
 			best_idx = select_next(X_pairwise, gains, self.current_values,
 				self.mask)
+			print(gains)
 			self.current_values = torch.max(X_pairwise[best_idx],
 				self.current_values).to(self.device)
 
