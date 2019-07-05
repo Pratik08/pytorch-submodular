@@ -73,7 +73,6 @@ class FacilityLocationSelection(SubmodularSelection):
 
 			best_idx = select_next(X_pairwise, gains, self.current_values,
 				self.mask)
-			print(gains)
 			self.current_values = torch.max(X_pairwise[best_idx],
 				self.current_values).to(self.device)
 

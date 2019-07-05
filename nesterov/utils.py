@@ -1,51 +1,9 @@
 # # utils.py
 # # Author: Pratik Dubal <pratik.dubal@columbia.edu>
 # # Date: 29th June 2019
-#
-# import heapq
-#
-#
-# class PriorityQueue(object):
-#     def __init__(self):
-#         self.pq = []
-#         self.lookup = {}
-#
-#     def add(self, item, weight):
-#         if item in self.lookup:
-#             self.remove(item)
-#
-#         ele = [weight, item]
-#         self.lookup[item] = weight
-#         heapq.heappush(self.pq, ele)
-#
-#     def remove(self, item):
-#         ele = self.lookup.pop(item)
-#         ele[-1] = "DELETED"
-#
-#     def pop(self):
-#         while self.pq:
-#             weight, item = heapq.heappop(self.pq)
-#             if item != "DELETED":
-#                 del self.lookup[item]
-#                 return weight, item
-#
-#         raise KeyError("No elements left in the priority queue.")
-#
-#     def peek(self):
-#         return self.pq[0]
 
+import heapq
 
-
-# utils.py
-# Author: Jacob Schreiber <jmschreiber91@gmail.com>
-
-"""
-This code contains utility functions to support the main functionality of
-the code.
-"""
-
-from heapq import heappush
-from heapq import heappop
 
 class PriorityQueue(object):
     """A priority queue implementation.
@@ -107,7 +65,7 @@ class PriorityQueue(object):
 
         entry = [weight, item]
         self.lookup[item] = entry
-        heappush(self.pq, entry)
+        heapq.heappush(self.pq, entry)
 
     def remove(self, item):
         """Remove an element from the queue.
@@ -149,7 +107,7 @@ class PriorityQueue(object):
         """
 
         while self.pq:
-            weight, item = heappop(self.pq)
+            weight, item = heapq.heappop(self.pq)
             if item != "DELETED":
                 del self.lookup[item]
                 return weight, item
