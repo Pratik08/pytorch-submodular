@@ -9,8 +9,8 @@ for n in [5000]:
                            numpy.random.normal(2, 1, size=(n, 2)),
                            numpy.random.normal(15, 1, size=(n, 2))])
     start_time = time.time()
-    fl = FacilityLocationSelection(n, 'euclidean', n_greedy_samples=400)
+    fl = FacilityLocationSelection(n, 'euclidean', n_greedy_samples=1)
     fl.fit(X)
     end_time = time.time()
-    print("n = ", str(n)," time: " + str(end_time - start_time))
-    # print(fl.ranking)
+    print("n = ", str(n), " time: " + str(end_time - start_time))
+    print(fl.ranking)
