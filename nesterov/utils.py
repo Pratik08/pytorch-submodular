@@ -1,9 +1,14 @@
-# # utils.py
-# # Author: Pratik Dubal <pratik.dubal@columbia.edu>
-# # Date: 29th June 2019
+# utils.py
+# Author: Pratik Dubal <pratik.dubal@columbia.edu>
+# Date: 29th June 2019
 
-import heapq
+"""
+This code contains utility functions to support the main functionality of
+the code.
+"""
 
+from heapq import heappush
+from heapq import heappop
 
 class PriorityQueue(object):
     """A priority queue implementation.
@@ -60,12 +65,14 @@ class PriorityQueue(object):
         None
         """
 
+
+
         if item in self.lookup:
             self.remove(item)
 
         entry = [weight, item]
         self.lookup[item] = entry
-        heapq.heappush(self.pq, entry)
+        heappush(self.pq, entry)
 
     def remove(self, item):
         """Remove an element from the queue.
@@ -83,6 +90,7 @@ class PriorityQueue(object):
         -------
         None
         """
+
 
         entry = self.lookup.pop(item)
         entry[-1] = "DELETED"
@@ -107,7 +115,7 @@ class PriorityQueue(object):
         """
 
         while self.pq:
-            weight, item = heapq.heappop(self.pq)
+            weight, item = heappop(self.pq)
             if item != "DELETED":
                 del self.lookup[item]
                 return weight, item
