@@ -4,5 +4,6 @@
 
 from .facilityLocation import FacilityLocationSelection
 from .maxMarginRel import MaxMarginRelSelection
+from .disparityMin import DisparityMin
 
 __version__ = '0.0.0'

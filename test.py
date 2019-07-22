@@ -1,5 +1,6 @@
 from nesterov import FacilityLocationSelection
 from nesterov import MaxMarginRelSelection
+from nesterov import DisparityMin
 import numpy
 import time
 import torch
@@ -12,19 +13,20 @@ for n in [25]:
                            numpy.random.normal(15, 1, size=(n, 2))])
 
     X_1 = numpy.concatenate([numpy.random.normal(7.5, 1, size=(n, 2)),
-                           numpy.random.rand(n, 2),
-                           numpy.random.normal(15, 1, size=(n, 2))])
+                             numpy.random.rand(n, 2),
+                             numpy.random.normal(15, 1, size=(n, 2))])
 
     X_2 = numpy.concatenate([numpy.random.normal(7.5, 1, size=(n, 2)),
-                           numpy.array([[5, 16]]),
-                           numpy.random.normal(2, 1, size=(n, 2)),
-                           numpy.array([[16, 2], [12, 4]]),
-                           numpy.random.normal(15, 1, size=(n, 2)),
-                           numpy.array([[1, 12], [8, 8]])])
+                             numpy.array([[5, 16]]),
+                             numpy.random.normal(2, 1, size=(n, 2)),
+                             numpy.array([[16, 2], [12, 4]]),
+                             numpy.random.normal(15, 1, size=(n, 2)),
+                             numpy.array([[1, 12], [8, 8]])])
 
     start_time = time.time()
-    # func = FacilityLocationSelection(5, 'euclidean', n_greedy_samples=1)
-    func = MaxMarginRelSelection(5, 'euclidean')
+    #func = FacilityLocationSelection(2, 'euclidean', n_greedy_samples=1)
+    #func = MaxMarginRelSelection(5, 'euclidean')
+    func = DisparityMin(5, 'euclidean', n_greedy_samples=5)
     func.fit(X)
     end_time = time.time()
     print("n = ", str(n), " time: " + str(end_time - start_time))
@@ -47,4 +49,4 @@ for n in [25]:
 
     plt.scatter(plt_x, plt_y, color='blue')
     plt.scatter(out_x, out_y, color='red')
-    plt.show()
+    plt.savefig("plot.png")
